@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>生成话术</title>
+    <meta charset="utf-8">
+    <style>
+      label {
+        display: block;
+        margin-bottom: 10px;
+      }
+      input[type="text"] {
+        width: 100%;
+        padding: 5px;
+        font-size: 16px;
+      }
+      button {
+        margin-top: 10px;
+        padding: 10px;
+        font-size: 16px;
+      }
+      #result {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #eee;
+      }
+      #defaultTemplateInput {
+        margin-top: 20px;
+        width: 100%;
+        padding: 5px;
+        font-size: 16px;
+      }
+      #setDefaultButton {
+        margin-top: 10px;
+        padding: 10px;
+        font-size: 16px;
+      }
+      #templateSelect {
+        margin-top: 20px;
+        width: 100%;
+        padding: 5px;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <label>
+        名称：
+        <input type="text" id="name">
+      </label>
+      <label>
+        订单号码：
+        <input type="text" id="orderNumber">
+      </label>
+      <label>
+        选择模板：
+        <select id="templateSelect">
+          <option value="">请选择模板</option>
+        </select>
+      </label>
+      <button type="button" id="generateButton">生成话术</button>
+    </form>
+    <div id="result"></div>
+    <label>
+      默认模板：
+      <input type="text" id="defaultTemplateInput">
+    </label>
+    <button type="button"
+id="setDefaultButton">设置默认模板</button>
+<script>
+const templates = [
+{
+name: '模板1',
+text: '您好，${name}，感谢您关注我们的产品。您的订单号码为${orderNumber}，我们将尽快为您处理。'
+},
+{
+name: '模板2',
+text: '尊敬的${name}，您好。我们已经收到了您的订单号码为${orderNumber}的订单，感谢您的支持。我们将尽快为您安排发货，敬请留意。'
+},
+{
+name: '模板3',
+text: '亲爱的${name}，您好。您的订单号码为${orderNumber}，我们会尽快为您处理，感谢您的支持！'
+}
+];
+    const nameInput = document.getElementById('name');
+  const orderNumberInput = document.getElementById('orderNumber');
+  const templateSelect = document.getElementById('templateSelect');
+  const defaultTemplateInput = document.getElementById('defaultTemplateInput');
+  const generateButton = document.getElementById('generateButton');
+  const setDefaultButton = document.getElementById('setDefaultButton');
+  const resultDiv = document.getElementById('result');
+
+  // 将模板添加到下拉列表中
+  templates.forEach(template => {
+    const option = document.createElement('option');
+    option.value = template.text;
+    option.innerText = template.name;
+    templateSelect.appendChild(option);
+  });
+
+  // 点击“生成话术”按钮时，根据选择的模板生成话术
+  generateButton.addEventListener('click', () => {
+    const name = nameInput.value;
+    const orderNumber = orderNumberInput.value;
+    const templateText = templateSelect.value;
+    const result = templateText.replace('${name}', name).replace('${orderNumber}', orderNumber);
+    resultDiv.innerText = result;
+  });
+
+  // 点击“设置默认模板”按钮时，将默认模板的值保存到localStorage中
+  setDefaultButton.addEventListener('click', () => {
+    const defaultTemplate = defaultTemplateInput.value;
+    localStorage.setItem('defaultTemplate', defaultTemplate);
+    alert('默认模板设置成功！');
+  });
+
+  // 页面加载时，将localStorage中保存的默认模板显示在默认模板输入框中
+  const defaultTemplate = localStorage.getItem('defaultTemplate');
+  if (defaultTemplate) {
+    defaultTemplateInput.value = defaultTemplate;
+  }
+</script>
+</body>
+</html>
